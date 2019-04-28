@@ -45,6 +45,24 @@
     saveStory(){
       songName = document.getElementById("song-name").value;
       storyText = document.getElementById("story-text").value;
+
+      if (songName && storyText) {
+				// DATABASE WRITE - Preparation
+				let collectionRef = database.collection('story');
+				let docRef = collectionRef.doc();
+				let id = docRef.id;
+
+				// DATABASE WRITE
+				collectionRef.doc(id).set({
+          song: songName,
+					message: storyText,
+					id: id,
+					timestamp: firebase.firestore.FieldValue.serverTimestamp()
+				});
+
+			}
+			event.preventDefault();
     }
+
   </script>
 </createstory>
