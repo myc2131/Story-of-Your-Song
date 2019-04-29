@@ -1,4 +1,4 @@
-<createstory>
+<createStory>
 
   <!-- Button trigger modal -->
   <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
@@ -37,11 +37,8 @@
 
   <script>
     var tag = this;
-    console.log('createStory.tag');
-
     var songName;
     var storyText;
-
     saveStory(){
       songName = document.getElementById("song-name").value;
       storyText = document.getElementById("story-text").value;
@@ -52,7 +49,10 @@
 				let docRef = collectionRef.doc();
 				let id = docRef.id;
 
-				// DATABASE WRITE
+        let myStoryRef = database.collection('user').doc(this.user.uid).collection('myStory');
+        let myStoryDocRef = myStoryRef.doc();
+        let myStoryId = myStoryDocRef.id;
+				// DATABASE WRITE - write to collection stories
 				collectionRef.doc(id).set({
           song: songName,
 					message: storyText,
@@ -60,9 +60,20 @@
 					timestamp: firebase.firestore.FieldValue.serverTimestamp()
 				});
 
+        myStoryRef.doc(myStoryId).set({
+          song: songName,
+					message: storyText,
+					id: id,
+					timestamp: firebase.firestore.FieldValue.serverTimestamp()
+        });
+
 			}
 			event.preventDefault();
     }
 
+    this.on('update', () => {
+    this.user = opts.user;
+  });
+
   </script>
-</createstory>
+</createStory>

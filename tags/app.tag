@@ -16,7 +16,7 @@
 			<button type="button" onclick={ toggleBrowse }>Browse</button>
 			<button type="button" onclick={ toggleMyStories }>My stories</button>
 			<button type="button" onclick={ toggleLikedStories }>Liked stories</button>
-			<createStory></createStory>
+			<createStory user={ user }></createStory>
 		</div>
 		<!-- Right side section -->
 		<div>
@@ -27,10 +27,10 @@
 				<browse></browse>
 			</div>
 			<div show={subMenuState==='myStories'}>
-				<myStories></myStories>
+				<mystories></mystories>
 			</div>
 			<div show={subMenuState==='likedStories'}>
-				<likedStories></likedStories>
+				<likedstories></likedstories>
 			</div>
 		</div>
 	</div>
@@ -39,16 +39,18 @@
 		// JAVASCRIPT
 		var tag = this;
 		console.log('app.tag');
-
+		var userRef = database.collection('user');
 		this.menuState = 'dashboard';
 		this.subMenuState = 'Home';
+
 
 		firebase.auth().onAuthStateChanged(userObj => {
 			if (userObj) {
 				this.user = userObj;
+				let userId = this.user.uid
+				observer.trigger('userLogin',userId)
 			} else {
 				this.user = null;
-				this.room = null;
 			}
 			this.update();
 		});
@@ -57,19 +59,34 @@
 			var provider = new firebase.auth.GoogleAuthProvider();
 			firebase.auth().signInWithPopup(provider);
 		}
-
-		toggleHome(){
+		toggleHome() {
 			this.subMenuState = 'Home';
 		}
-		toggleBrowse(){
+		toggleBrowse() {
 			this.subMenuState = 'Browse';
 		}
-		toggleMyStories(){
+		toggleMyStories() {
 			this.subMenuState = 'myStories';
 		}
-		toggleLikedStories(){
+		toggleLikedStories() {
 			this.subMenuState = 'likedStories';
 		}
+
+// 		//observer if user logged in
+// 		observer.on('userLogin', userId => {
+// 			userRef.doc(userId).get().then(doc=>{
+// 				if (!doc.exists){
+// 					var newUserRef = userRef.doc(userId);
+// 					newUserRef.collection('myStory').add({
+// 						message:''
+// 					})
+// 					newUserRef.set({
+// 						id:userId,
+// 						name: tag.user.displayName
+// 					});
+// 				}
+// 			});
+// });
 	</script>
 
 </app>
