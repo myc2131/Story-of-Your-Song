@@ -25,11 +25,23 @@
               <label for="message-text" class="col-form-label">Story of your song</label>
               <textarea class="form-control" id="story-text"></textarea>
             </div>
+            <div class="btn-group">
+              <button type="button" class="btn btn-light dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Select a Catogory
+              </button>
+              <div class="dropdown-menu" id = "storyType">
+                <a class="dropdown-item" onclick={loveType} id = "love" value="love" href="#">Love</a>
+                <a class="dropdown-item" onclick={griefType} id = "grief" href="#">Grief</a>
+                <a class="dropdown-item" onclick={familyType} id = "family" href="#">Family</a>
+                <a class="dropdown-item" onclick={adversityType} id = "adversity" href="#">Adversity</a>
+                <a class="dropdown-item" onclick={memoryType} id = "memory" href="#">Memories</a>
+              </div>
+            </div>
           </form>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary" onclick = {saveStory}>Save changes</button>
+          <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick={clearInput}>Close</button>
+          <button type="button" class="btn btn-primary" onclick={saveStory} data-dismiss="modal">Save changes</button>
         </div>
       </div>
     </div>
@@ -39,41 +51,66 @@
     var tag = this;
     var songName;
     var storyText;
-    saveStory(){
+    var storyType;
+    saveStory() {
       songName = document.getElementById("song-name").value;
       storyText = document.getElementById("story-text").value;
 
       if (songName && storyText) {
-				// DATABASE WRITE - Preparation
-				let collectionRef = database.collection('story');
-				let docRef = collectionRef.doc();
-				let id = docRef.id;
+        // DATABASE WRITE - Preparation
+        let collectionRef = database.collection('story');
+        let docRef = collectionRef.doc();
+        let id = docRef.id;
 
         let myStoryRef = database.collection('user').doc(this.user.uid).collection('myStory');
         let myStoryDocRef = myStoryRef.doc();
         let myStoryId = myStoryDocRef.id;
-				// DATABASE WRITE - write to collection stories
-				collectionRef.doc(id).set({
-          song: songName,
-					message: storyText,
-					id: id,
-					timestamp: firebase.firestore.FieldValue.serverTimestamp()
-				});
+        // DATABASE WRITE - write to collection stories
+        collectionRef.doc(id).set({song: songName, message: storyText, id: id, timestamp: firebase.firestore.FieldValue.serverTimestamp(), type:storyType});
 
-        myStoryRef.doc(myStoryId).set({
-          song: songName,
-					message: storyText,
-					id: id,
-					timestamp: firebase.firestore.FieldValue.serverTimestamp()
-        });
+        // DATABASE WRITE - write to my stories
+        myStoryRef.doc(myStoryId).set({song: songName, message: storyText, id: id, timestamp: firebase.firestore.FieldValue.serverTimestamp(), type:storyType});
 
-			}
-			event.preventDefault();
+      }
+      event.preventDefault();
+      document.getElementById('story-text').value = '';
+      document.getElementById('song-name').value = '';
     }
 
     this.on('update', () => {
-    this.user = opts.user;
-  });
+      this.user = opts.user;
+    });
+
+    clearInput() {
+      document.getElementById('story-text').value = '';
+      document.getElementById('song-name').value = '';
+    }
+
+    loveType() {
+      storyType = document.getElementById("love").text;
+      console.log(storyType);
+    }
+
+    familyType() {
+      storyType = document.getElementById("family").text;
+      console.log(storyType);
+    }
+
+    griefType() {
+      storyType = document.getElementById("grief").text;
+      console.log(storyType);
+    }
+
+    adversityType() {
+      storyType = document.getElementById("adversity").text;
+      console.log(storyType);
+    }
+
+    memoryType() {
+      storyType = document.getElementById("memory").text;
+      console.log(storyType);
+    }
+
 
   </script>
 </createStory>
