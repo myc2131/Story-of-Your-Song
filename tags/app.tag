@@ -27,7 +27,7 @@
 				<browse></browse>
 			</div>
 			<div show={subMenuState==='myStories'}>
-				<mystories></mystories>
+				<mystories user={user}></mystories>
 			</div>
 			<div show={subMenuState==='likedStories'}>
 				<likedstories></likedstories>

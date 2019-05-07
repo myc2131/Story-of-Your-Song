@@ -26,7 +26,6 @@
 
       this.on('mount', () => {
 			database.collection('story').orderBy('timestamp','desc').limit(4).get().then(snapshot => {
-					console.log('Collection successfully fetched.');
 					this.myNewStories = [];
 					snapshot.forEach(doc => {
 						let newStory = doc.data();
