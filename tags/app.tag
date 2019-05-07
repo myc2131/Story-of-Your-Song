@@ -1,8 +1,18 @@
 <app>
 	<!-- Login page -->
-	<div show={menuState==='login'}>
-		<button type="button" onclick={ login }>login</button>
-	</div>
+	<div class="wrapper">
+	<form class="form-signin">
+			<h2 class="form-signin-heading">Story of Your Song</h2>
+			<input type="text" class="form-control" name="username" placeholder="Email Address" required="" autofocus="" />
+			<input type="password" class="form-control" name="password" placeholder="Password" required=""/>
+			<label class="checkbox">
+					<input type="checkbox" value="remember-me" id="rememberMe" name="rememberMe"> Remember me
+			</label>
+			<div show={menuState==='login'}>
+					<button class="btn btn-lg btn-primary btn-block" type="submit" onclick={ login }>Login</button>
+			</div>
+	</form>
+</div>
 
 	<!-- dashboard page -->
 	<div show={menuState==='dashboard'}>
@@ -40,7 +50,7 @@
 		var tag = this;
 		console.log('app.tag');
 		var userRef = database.collection('user');
-		this.menuState = 'dashboard';
+		this.menuState = 'login';
 		this.subMenuState = 'Home';
 
 
