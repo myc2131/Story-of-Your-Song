@@ -1,5 +1,6 @@
 <app>
 	<!-- Login page -->
+	<div show={menuState==='login'}>
 	<div class="wrapper">
 	<form class="form-signin">
 			<h2 class="form-signin-heading">Story of Your Song</h2>
@@ -12,6 +13,7 @@
 					<button class="btn btn-lg btn-primary btn-block" type="submit" onclick={ login }>Login</button>
 			</div>
 	</form>
+</div>
 </div>
 
 	<!-- dashboard page -->
@@ -50,7 +52,7 @@
 		var tag = this;
 		console.log('app.tag');
 		var userRef = database.collection('user');
-		this.menuState = 'login';
+		this.menuState = 'dashboard';
 		this.subMenuState = 'Home';
 
 
