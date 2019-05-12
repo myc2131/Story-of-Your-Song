@@ -52,8 +52,8 @@
 		var tag = this;
 		console.log('app.tag');
 		var userRef = database.collection('user');
-		this.menuState = 'dashboard';
-		this.subMenuState = 'Home';
+		//this.menuState = 'dashboard';
+	  this.subMenuState = 'Home';
 
 
 		firebase.auth().onAuthStateChanged(userObj => {
@@ -61,8 +61,10 @@
 				this.user = userObj;
 				let userId = this.user.uid
 				observer.trigger('userLogin',userId)
+				this.menuState = 'dashboard';
 			} else {
 				this.user = null;
+				this.menuState = 'login';
 			}
 			this.update();
 		});
@@ -83,6 +85,10 @@
 		toggleLikedStories() {
 			this.subMenuState = 'likedStories';
 		}
+
+		// this.on('mount', () => {
+		// 	if
+		// });
 
 // 		//observer if user logged in
 // 		observer.on('userLogin', userId => {
