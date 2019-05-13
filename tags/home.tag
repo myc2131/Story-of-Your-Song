@@ -3,18 +3,13 @@
   <div>
     <h1>New Stories</h1>
     <hr>
+    <div class="row">
     <div each={story in myNewStories}>
-       {story.message}
+      <div class="col-sm-3">
+       <story story={story}></story>
+       </div>
     </div>
-  </div>
-
-  <div>
-    <h1>Popular stories</h1>
-    <hr>
-    <div each={story in popularStories}>
-       {story.name}
     </div>
-
   </div>
 
   <script>
@@ -25,7 +20,7 @@
     var storyRef = database.collection('story');
 
       this.on('mount', () => {
-			database.collection('story').orderBy('timestamp','desc').limit(4).get().then(snapshot => {
+			database.collection('story').orderBy('timestamp','desc').get().then(snapshot => {
 					this.myNewStories = [];
 					snapshot.forEach(doc => {
 						let newStory = doc.data();
@@ -34,15 +29,6 @@
 					this.update();
 			});
 		});
-
-
-    //Read most popular stories
-    this.popularStories = [
-      {name: 2},
-      {name: 2},
-      {name: 2},
-      {name: 2}
-    ]
 
   </script>
 </home>

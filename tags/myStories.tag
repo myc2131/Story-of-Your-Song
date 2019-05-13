@@ -1,6 +1,12 @@
 <myStories>
+  <h1>My Stories</h1>
+  <hr>
+  <div class="row">
   <div each = {story in myStories}>
-    {story.message}
+    <div class="col-3">
+    <story story={story}></story>
+    </div>
+  </div>
   </div>
 
 <script>

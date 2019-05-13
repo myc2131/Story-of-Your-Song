@@ -19,11 +19,12 @@
           <form>
             <div class="form-group">
               <label for="message-text" class="col-form-label">Song of your story</label>
-              <textarea type="text" class="form-control" id="song-name"></textarea>
+              <textarea type="text" class="form-control" id="song-name" placeholder="Type the song name"></textarea>
+              <textarea type="text" class="form-control" id="song-link" placeholder="Paste YouTube Link here"></textarea>
             </div>
             <div class="form-group">
               <label for="message-text" class="col-form-label">Story of your song</label>
-              <textarea class="form-control" id="story-text"></textarea>
+              <textarea class="form-control" id="story-text" placeholder="What's on your mind?"></textarea>
             </div>
             <div class="btn-group">
               <button type="button" class="btn btn-light dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -49,14 +50,15 @@
 
   <script>
     var tag = this;
-    var songName;
+    var videoId;
     var storyText;
     var storyType;
     saveStory() {
-      songName = document.getElementById("song-name").value;
+      videoId = youtube_parser(document.getElementById("song-link").value);
       storyText = document.getElementById("story-text").value;
+      songName = document.getElementById("song-name").value;
 
-      if (songName && storyText) {
+      if (videoId && storyText && songName) {
         // DATABASE WRITE - Preparation
         let collectionRef = database.collection('story');
         let docRef = collectionRef.doc();
@@ -65,16 +67,19 @@
         let myStoryRef = database.collection('user').doc(this.user.uid).collection('myStory');
         let myStoryDocRef = myStoryRef.doc();
         let myStoryId = myStoryDocRef.id;
+
         // DATABASE WRITE - write to collection stories
-        collectionRef.doc(id).set({song: songName, message: storyText, id: id, timestamp: firebase.firestore.FieldValue.serverTimestamp(), type:storyType});
+        collectionRef.doc(id).set({songName: songName, YouTubeID: videoId, message: storyText, id: id, timestamp: firebase.firestore.FieldValue.serverTimestamp(), type:storyType});
 
         // DATABASE WRITE - write to my stories
-        myStoryRef.doc(myStoryId).set({song: songName, message: storyText, id: id, timestamp: firebase.firestore.FieldValue.serverTimestamp(), type:storyType});
+        myStoryRef.doc(myStoryId).set({songName: songName, YouTubeID: videoId, message: storyText, id: id, timestamp: firebase.firestore.FieldValue.serverTimestamp(), type:storyType});
 
       }
       event.preventDefault();
       document.getElementById('story-text').value = '';
+      document.getElementById('song-link').value = '';
       document.getElementById('song-name').value = '';
+
     }
 
     this.on('update', () => {
@@ -83,7 +88,7 @@
 
     clearInput() {
       document.getElementById('story-text').value = '';
-      document.getElementById('song-name').value = '';
+      document.getElementById('song-link').value = '';
     }
 
     loveType() {
@@ -110,6 +115,13 @@
       storyType = document.getElementById("memory").text;
       console.log(storyType);
     }
+
+    //Get the YouTube ID from the link people post.
+    function youtube_parser(url){
+    var regExp = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#\&\?]*).*/;
+    var match = url.match(regExp);
+    return (match&&match[7].length==11)? match[7] : false;
+}
 
 
   </script>
