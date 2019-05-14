@@ -1,5 +1,6 @@
 body {
-    background-image: url("https://www.ojdo.de/wp/wp-content/gallery/white-desktop-wallpapers-pinakothek-2/pinakothek-white-circular-roof-blurred-2.jpg") !important;
+  background: #c6e2ff !important;
+  background-color: #c6e2ff;
 }
 
 .wrapper {
